@@ -48,5 +48,13 @@ function closePopup() {
   align-items: center;
   width: 100%;
   gap: 10px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 }
 </style>
