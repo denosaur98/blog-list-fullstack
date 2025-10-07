@@ -2,6 +2,10 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import type { BlogInterface } from '../interfaces/blog-interface';
 import type { CommentInterface } from '../interfaces/comment-interface';
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+
+const notyf = new Notyf();
 
 export const useBlogsStore = defineStore('blogs', {
   state: () => {
@@ -20,6 +24,7 @@ export const useBlogsStore = defineStore('blogs', {
         return response.data
       } catch(error) {
         console.error(`Ошибка при загрузке блогов: ${error}`)
+        notyf.error(`Ошибка при загрузке блогов: ${error}`);
       }
     },
 
@@ -29,9 +34,12 @@ export const useBlogsStore = defineStore('blogs', {
 
         this.fetchAllBlogs()
 
+        notyf.success('Блог успешно создан');
+
         return response.data
       } catch(error) {
         console.error(`Ошибка при создании блога: ${error}`)
+        notyf.error(`Ошибка при создании блога: ${error}`);
       }
     },
 
@@ -41,9 +49,12 @@ export const useBlogsStore = defineStore('blogs', {
 
         this.fetchAllBlogs()
 
+        notyf.success('Блог успешно обновлен!');
+
         return response.data
       } catch(error) {
-        console.error(`Ошибка при создании блога: ${error}`)
+        console.error(`Ошибка при обновлении блога: ${error}`)
+        notyf.error(`Ошибка при обновлении блога: ${error}`);
       }
     },
 
@@ -53,9 +64,12 @@ export const useBlogsStore = defineStore('blogs', {
 
         this.fetchAllBlogs()
 
+        notyf.success('Комментарий успешно добавлен!');
+
         return response.data
       } catch(error) {
         console.error(`Ошибка при добавлении комментария: ${error}`)
+        notyf.error(`Ошибка при добавлении комментария: ${error}`);
       }
     },
 
@@ -65,9 +79,12 @@ export const useBlogsStore = defineStore('blogs', {
 
         this.fetchAllBlogs()
 
+        notyf.success('Блог успешно удален!');
+
         return response.data
       } catch(error) {
         console.error(`Ошибка при удалении блога: ${error}`)
+        notyf.error(`Ошибка при удалении блога: ${error}`);
       }
     }
   }

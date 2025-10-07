@@ -16,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^3.1.2",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",
+    "notyf": "^3.10.0",
     "pinia": "^3.0.3",
     "sass": "^1.93.2",
     "vue": "^3.5.21",
