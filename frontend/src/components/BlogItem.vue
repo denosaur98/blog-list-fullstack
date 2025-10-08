@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-item">
+  <div :class="isYourBlog ? 'blog-item background-green' : 'blog-item'">
     <div class="item__actions-wrapper">
       <button class="base-button background-blue" @click="openPopup('comment')">
         <font-awesome-icon icon="fa-solid fa-comment" />
@@ -9,7 +9,7 @@
         <font-awesome-icon icon="fa-solid fa-pen-to-square" />
         Редактировать
       </button>
-      <button class="base-button background-red" @click="store.deleteBlog(props.blogData.id)">
+      <button class="base-button background-red" @click="blogStore.deleteBlog(props.blogData.id)">
         <font-awesome-icon icon="fa-solid fa-trash" />
         Удалить
       </button>
@@ -60,12 +60,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 import { useDateFormat } from '@vueuse/core';
 import { useBlogsStore } from '../store/blogs-store';
+import { useAuthStore } from '../store/auth-store';
 import PopupItem from './PopupItem.vue';
 
-const store = useBlogsStore()
+const blogStore = useBlogsStore()
+const authStore = useAuthStore()
 
 const props = defineProps({
   blogData: Object
@@ -86,6 +88,10 @@ const isCommentsOpen = ref<Boolean>(false)
 function toggleComments(): void {
   isCommentsOpen.value = !isCommentsOpen.value
 }
+
+const isYourBlog = computed(() => {
+  return props.blogData.author.id === authStore.user.id
+})
 </script>
 
 <style lang="scss" scoped>

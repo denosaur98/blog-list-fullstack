@@ -14,18 +14,6 @@
         :placeholder="props.type !== 'comment' ? 'Введите описание блога:' : 'Введите комментарий:'"
         v-model="description"
       />
-      <input
-        v-if="props.type !== 'update'"
-        class="base-input"
-        placeholder="Введите email автора:"
-        v-model="email"
-      >
-      <input
-        v-if="props.type !== 'update'"
-        class="base-input"
-        placeholder="Введите имя автора:"
-        v-model="name"
-      >
       <button
         :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
         style="width: 100%;"
@@ -67,12 +55,10 @@ const popupTypeTitle = computed<String>(() => {
 
 const title = ref<String>('')
 const description = ref<String>('')
-const email = ref<String>('')
-const name = ref<String>('')
 
 const validateForm = computed<Boolean>(() => {
   if(props.type === 'create') {
-    if(title.value.trim() !== '' && email.value.trim() !== '') {
+    if(title.value.trim() !== '') {
       return true
     } else {
       return false
@@ -84,7 +70,7 @@ const validateForm = computed<Boolean>(() => {
       return false
     }
   } else if(props.type === 'comment') {
-    if(description.value.trim() !== '' && email.value.trim() !== '') {
+    if(description.value.trim() !== '') {
       return true
     } else {
       return false

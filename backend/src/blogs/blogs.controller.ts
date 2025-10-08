@@ -11,7 +11,6 @@ export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async allBlogs() {
     return await this.blogsService.allBlogs()
   }

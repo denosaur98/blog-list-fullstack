@@ -11,6 +11,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => {
     return {
       user: useLocalStorage('user', {
+        id: null,
         email: null,
         access_token: null
       })
@@ -23,6 +24,7 @@ export const useAuthStore = defineStore('auth', {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/${type}`, authUser)
 
         this.user = {
+          id: response.data.id,
           access_token: response.data.access_token,
           email: response.data.email,
         }
@@ -36,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout(): Promise<Object> {
       return this.user = {
+        id: null,
         email: null,
         access_token: null
       }
