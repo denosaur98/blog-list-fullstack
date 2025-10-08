@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/auth',
     component: AuthPage,
-    meta: { requiresAuth: true }
+    meta: { requiresGuest: true }
   }
 ]
 
@@ -25,9 +25,17 @@ router.beforeEach((to, from, next) => {
   const store = useAuthStore()
 
   if(to.meta.requiresAuth && !store.user.access_token) {
-    next('/auth')
-  } else if(to.meta.requiresAuth && store.user.access_token) {
-    next('/')
+    if(to.path !== '/auth') {
+      next('/auth')
+    } else {
+      next()
+    }
+  } else if(to.meta.requiresGuest && store.user.access_token) {
+    if(to.path !== '/') {
+      next('/')
+    } else {
+      next()
+    }
   } else {
     next()
   }
