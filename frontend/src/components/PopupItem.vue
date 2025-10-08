@@ -26,6 +26,12 @@
         placeholder="Введите имя автора:"
         v-model="name"
       >
+      <input
+        v-if="props.type !== 'update'"
+        class="base-input"
+        placeholder="Введите пароль автора:"
+        v-model="password"
+      >
       <button
         :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
         style="width: 100%;"
@@ -69,6 +75,7 @@ const title = ref<String>('')
 const description = ref<String>('')
 const email = ref<String>('')
 const name = ref<String>('')
+const password = ref<String>('')
 
 const validateForm = computed<Boolean>(() => {
   if(props.type === 'create') {
@@ -108,7 +115,8 @@ async function createBlog(): Promise<void> {
     description: description.value,
     author: {
       email: email.value,
-      name: name.value
+      name: name.value,
+      password: password.value
     }
   }
 
@@ -131,7 +139,8 @@ async function addComment(): Promise<void> {
     text: description.value,
     author: {
       email: email.value,
-      name: name.value
+      name: name.value,
+      password: password.value
     }
   }
 

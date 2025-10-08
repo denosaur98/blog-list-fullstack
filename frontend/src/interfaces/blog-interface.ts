@@ -1,8 +1,8 @@
-import type { AuthorInterface } from './author-interface';
+import type { UserInterface } from './user-interface';
 
 export interface BlogInterface {
   id?: string
   title: string
   description: string
-  author?: AuthorInterface
+  author?: UserInterface
 }

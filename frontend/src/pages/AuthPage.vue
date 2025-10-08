@@ -19,21 +19,30 @@
         </button>
       </div>
       <div class="form__actions-wrapper">
-        <input class="base-input" placeholder="Введите почту:" v-model="mail">
+        <input class="base-input" placeholder="Введите почту:" v-model="email">
         <input class="base-input" placeholder="Введите имя:" v-model="name" v-if="changeButtonActive === 'register'">
         <input class="base-input" placeholder="Введите пароль:" v-model="password">
       </div>
-      <button class="base-button background-green" type="button" style="width: 100%;">Отправить</button>
+      <button
+        :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
+        type="button"
+        style="width: 100%;"
+        @click="auth"
+        :disabled="!validateForm"
+      >
+        Отправить
+      </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
+import type { UserInterface } from '../interfaces/user-interface'
 
-const router = useRoute()
+const router = useRouter()
 const store = useAuthStore()
 
 const changeButtonActive = ref<String>('login')
@@ -41,16 +50,36 @@ function changeFormType(type: string) {
   changeButtonActive.value = type
 }
 
-const mail = ref<String>('')
+const email = ref<String>('')
 const name = ref<String>('')
 const password = ref<String>('')
 
-async function register() {
+const validateForm = computed(() => {
+  if(email.value.trim() !== '' && password.value.trim() !== '') {
+    return true
+  } else {
+    return false
+  }
+})
 
+async function auth(): Promise<void> {
+  const userReg: UserInterface = {
+    email: email.value,
+    name: name.value,
+    password: password.value
+  }
+  const userLog: UserInterface = {
+    email: email.value,
+    password: password.value
+  }
+
+  const response = await store.auth(changeButtonActive.value, changeButtonActive.value === 'login' ? userLog : userReg)
+
+  if(response === 'success') {
+    router.push('/')
+  }
 }
-async function login() {
-  
-}
+
 </script>
 
 <style lang="scss" scoped>

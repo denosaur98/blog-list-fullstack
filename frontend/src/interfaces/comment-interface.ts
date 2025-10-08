@@ -1,6 +1,6 @@
-import type { AuthorInterface } from './author-interface';
+import type { UserInterface } from './user-interface';
 
 export interface CommentInterface {
   text: string
-  author: AuthorInterface
+  author: UserInterface
 }

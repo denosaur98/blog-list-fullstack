@@ -15,7 +15,7 @@ export const useBlogsStore = defineStore('blogs', {
   },
 
   actions: {
-    async fetchAllBlogs() {
+    async fetchAllBlogs(): Promise<void> {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`)
 
@@ -28,7 +28,7 @@ export const useBlogsStore = defineStore('blogs', {
       }
     },
 
-    async createBlog(blog: BlogInterface) {
+    async createBlog(blog: BlogInterface): Promise<void> {
       try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/blogs`, blog)
 
@@ -43,7 +43,7 @@ export const useBlogsStore = defineStore('blogs', {
       }
     },
 
-    async updateBlog(blogId: BlogInterface, blog: BlogInterface) {
+    async updateBlog(blogId: BlogInterface, blog: BlogInterface): Promise<void> {
       try {
         const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${blogId}`, blog)
 
@@ -58,7 +58,7 @@ export const useBlogsStore = defineStore('blogs', {
       }
     },
 
-    async addComment(blogId: BlogInterface, comment: CommentInterface) {
+    async addComment(blogId: BlogInterface, comment: CommentInterface): Promise<void> {
       try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/blogs/${blogId}/comments`, comment)
 
@@ -73,7 +73,7 @@ export const useBlogsStore = defineStore('blogs', {
       }
     },
 
-    async deleteBlog(id: BlogInterface) {
+    async deleteBlog(id: BlogInterface): Promise<void> {
       try {
         const response = await axios.delete(`${import.meta.env.VITE_API_URL}/blogs/${id}`)
 
