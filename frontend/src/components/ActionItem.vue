@@ -30,13 +30,13 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const isPopupOpen = ref(false)
-const popupType = ref('')
-function openPopup(type: string) {
+const isPopupOpen = ref<Boolean>(false)
+const popupType = ref<String>('')
+function openPopup(type: string): void {
   isPopupOpen.value = true
   popupType.value = type
 }
-function closePopup() {
+function closePopup(): void {
   isPopupOpen.value = false
   popupType.value = ''
 }

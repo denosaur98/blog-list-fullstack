@@ -55,7 +55,7 @@ const emit = defineEmits(['close'])
 
 const store = useBlogsStore()
 
-const popupTypeTitle = computed(() => {
+const popupTypeTitle = computed<String>(() => {
   if(props.type === 'create') {
     return 'Создать блог'
   } else if(props.type === 'update') {
@@ -65,12 +65,12 @@ const popupTypeTitle = computed(() => {
   }
 })
 
-const title = ref('')
-const description = ref('')
-const email = ref('')
-const name = ref('')
+const title = ref<String>('')
+const description = ref<String>('')
+const email = ref<String>('')
+const name = ref<String>('')
 
-const validateForm = computed(() => {
+const validateForm = computed<Boolean>(() => {
   if(props.type === 'create') {
     if(title.value.trim() !== '' && email.value.trim() !== '') {
       return true
@@ -92,7 +92,7 @@ const validateForm = computed(() => {
   }
 })
 
-function popupTypeAction() {
+function popupTypeAction(): void {
   if(props.type === 'create') {
     createBlog()
   } else if(props.type === 'update') {
@@ -102,7 +102,7 @@ function popupTypeAction() {
   }
 }
 
-async function createBlog() {
+async function createBlog(): Promise<void> {
   const blog: BlogInterface = {
     title: title.value,
     description: description.value,
@@ -116,7 +116,7 @@ async function createBlog() {
 
   emit('close')
 }
-async function updateBlog() {
+async function updateBlog(): Promise<void> {
   const blog: BlogInterface = {
     title: title.value,
     description: description.value
@@ -126,7 +126,7 @@ async function updateBlog() {
 
   emit('close')
 }
-async function addComment() {
+async function addComment(): Promise<void> {
   const blog: CommentInterface = {
     text: description.value,
     author: {

@@ -1,8 +1,8 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from "class-validator";
 
-export class Author {
-  @IsString({ message: 'email должен быть строкой' })
-  @IsNotEmpty({ message: 'email не может быть пустым' })
+export class Register {
+  @IsString({ message: 'Почта должна быть строкой' })
+  @IsNotEmpty({ message: 'Почта не может быть пустой' })
   email: string;
 
   @IsString({ message: 'Имя должно быть строкой' })

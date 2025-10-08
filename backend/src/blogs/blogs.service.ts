@@ -3,6 +3,7 @@ import { PrismaService } from 'utils/prisma.service';
 import { CreateBlog } from './dto/create-blog.dto';
 import { UpdateBlog } from './dto/update-blog.dto';
 import { Comment } from './dto/comment.dto';
+import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class BlogsService {
@@ -32,6 +33,8 @@ export class BlogsService {
       throw new BadRequestException({ message: 'Блог с таким названием уже существует' });
     }
 
+    const hashedPassword = await bcrypt.hash(blog.author.password, 10)
+
     return this.prisma.blog.create({
       data: {
         title: blog.title,
@@ -41,7 +44,8 @@ export class BlogsService {
             where: { email: blog.author.email },
             create: {
               email: blog.author.email,
-              name: blog.author.name
+              name: blog.author.name,
+              password: hashedPassword
             }
           }
         }
@@ -83,6 +87,8 @@ export class BlogsService {
     if(!existingBlog) {
       throw new BadRequestException('Блог не найден')
     }
+
+    const hashedPassword = await bcrypt.hash(comment.author.password, 10)
     
     return this.prisma.comment.create({
       data: {
@@ -92,7 +98,8 @@ export class BlogsService {
             where: { email: comment.author.email },
             create: {
               email: comment.author.email,
-              name: comment.author.name
+              name: comment.author.name,
+              password: hashedPassword
             }
           }
         },

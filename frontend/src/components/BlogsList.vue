@@ -23,8 +23,8 @@ import BlogItem from './BlogItem.vue';
 
 const store = useBlogsStore()
 
-const searchValue = ref('')
-const filteredBlogs = computed(() => {
+const searchValue = ref<String>('')
+const filteredBlogs = computed<Array<[]>>(() => {
   return store.blogsList.filter(b => b.title.toLowerCase().includes(searchValue.value))
 })
 

@@ -1,5 +1,4 @@
 import { IsString, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class UpdateBlog {
   @IsString({ message: 'Название должно быть строкой' })
