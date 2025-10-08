@@ -54,7 +54,7 @@ const email = ref<String>('')
 const name = ref<String>('')
 const password = ref<String>('')
 
-const validateForm = computed(() => {
+const validateForm = computed<Boolean>(() => {
   if(email.value.trim() !== '' && password.value.trim() !== '') {
     return true
   } else {

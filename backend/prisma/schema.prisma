@@ -12,10 +12,16 @@ model User {
   email String @unique
   name String?
   password String
+  role UserRole @default(USER)
   posts Blog[]
   comments Comment[]
 
   @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model Blog {

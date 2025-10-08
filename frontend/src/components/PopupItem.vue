@@ -26,12 +26,6 @@
         placeholder="Введите имя автора:"
         v-model="name"
       >
-      <input
-        v-if="props.type !== 'update'"
-        class="base-input"
-        placeholder="Введите пароль автора:"
-        v-model="password"
-      >
       <button
         :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
         style="width: 100%;"
@@ -75,7 +69,6 @@ const title = ref<String>('')
 const description = ref<String>('')
 const email = ref<String>('')
 const name = ref<String>('')
-const password = ref<String>('')
 
 const validateForm = computed<Boolean>(() => {
   if(props.type === 'create') {
@@ -112,12 +105,7 @@ function popupTypeAction(): void {
 async function createBlog(): Promise<void> {
   const blog: BlogInterface = {
     title: title.value,
-    description: description.value,
-    author: {
-      email: email.value,
-      name: name.value,
-      password: password.value
-    }
+    description: description.value
   }
 
   await store.createBlog(blog)
@@ -136,12 +124,7 @@ async function updateBlog(): Promise<void> {
 }
 async function addComment(): Promise<void> {
   const blog: CommentInterface = {
-    text: description.value,
-    author: {
-      email: email.value,
-      name: name.value,
-      password: password.value
-    }
+    text: description.value
   }
 
   await store.addComment(props.blogData.id, blog)

@@ -1,35 +1,42 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlog } from './dto/create-blog.dto';
 import { UpdateBlog } from './dto/update-blog.dto';
 import { Comment } from './dto/comment.dto';
+import { GetUser } from 'src/decorators/get-user.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('blogs')
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async allBlogs() {
     return await this.blogsService.allBlogs()
   }
 
   @Post()
-  async createBlog(@Body() blog: CreateBlog) {
-    return await this.blogsService.createBlog(blog)
+  @UseGuards(JwtAuthGuard)
+  async createBlog(@GetUser() userId: any, @Body() blog: CreateBlog) {
+    return await this.blogsService.createBlog(userId, blog)
   }
 
   @Patch('/:id')
-  async updateBlog(@Param('id') blogId: string, @Body() blog: UpdateBlog) {
-    return await this.blogsService.updateBlog(blogId, blog)
+  @UseGuards(JwtAuthGuard)
+  async updateBlog(@GetUser() userId: any, @Param('id') blogId: string, @Body() blog: UpdateBlog) {
+    return await this.blogsService.updateBlog(userId, blogId, blog)
   }
 
   @Post(':id/comments')
-  async addComment(@Param('id') blogId: string, @Body() comment: Comment) {
-    return await this.blogsService.addComment(blogId, comment)
+  @UseGuards(JwtAuthGuard)
+  async addComment(@GetUser() userId: any, @Param('id') blogId: string, @Body() comment: Comment) {
+    return await this.blogsService.addComment(userId, blogId, comment)
   }
 
   @Delete('/:id')
-  async deleteBlog(@Param('id') blogId: string) {
-    return await this.blogsService.deleteBlog(blogId)
+  @UseGuards(JwtAuthGuard)
+  async deleteBlog(@GetUser() userId: any, @Param('id') blogId: string) {
+    return await this.blogsService.deleteBlog(userId, blogId)
   }
 }

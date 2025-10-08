@@ -3,7 +3,6 @@ import { PrismaService } from 'utils/prisma.service';
 import { CreateBlog } from './dto/create-blog.dto';
 import { UpdateBlog } from './dto/update-blog.dto';
 import { Comment } from './dto/comment.dto';
-import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class BlogsService {
@@ -12,57 +11,71 @@ export class BlogsService {
   async allBlogs() {
     return await this.prisma.blog.findMany({
       include: {
-        author: true,
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        },
         comments: {
           include: {
-            author: true
+            author: {
+              select: {
+                id: true,
+                email: true,
+                name: true
+              }
+            }
           }
         }
       }
     });
   }
 
-  async createBlog(blog: CreateBlog) {
+  async createBlog(userId: string, blog: CreateBlog) {
     const existingBlog = await this.prisma.blog.findFirst({
       where: {
         title: blog.title
       }
     });
-
     if(existingBlog) {
       throw new BadRequestException({ message: 'Блог с таким названием уже существует' });
     }
-
-    const hashedPassword = await bcrypt.hash(blog.author.password, 10)
 
     return this.prisma.blog.create({
       data: {
         title: blog.title,
         description: blog.description,
-        author: {
-          connectOrCreate: {
-            where: { email: blog.author.email },
-            create: {
-              email: blog.author.email,
-              name: blog.author.name,
-              password: hashedPassword
-            }
-          }
-        }
+        authorId: userId
       },
       include: {
-        author: true
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        }
       }
     });
   }
 
-  async updateBlog(blogId: string, blog: UpdateBlog) {
+  async updateBlog(userId: string, blogId: string, blog: UpdateBlog) {
     const existingBlog = await this.prisma.blog.findUnique({
       where: { id: blogId }
     });
-
     if(!existingBlog) {
       throw new BadRequestException('Блог не найден');
+    }
+
+    if(existingBlog.authorId === userId) {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userId
+        }
+      })
+      if(user?.role !== 'ADMIN') throw new BadRequestException({ message: 'Вы можете редактировать только свои блоги' })
     }
 
     return this.prisma.blog.update({
@@ -72,57 +85,63 @@ export class BlogsService {
         description: blog.description
       },
       include: {
-        author: true
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        }
       }
     });
   }
 
-  async addComment(blogId: string, comment: Comment) {
+  async addComment(userId: string, blogId: string, comment: Comment) {
     const existingBlog = await this.prisma.blog.findUnique({
       where: {
         id: blogId
       }
     })
-
     if(!existingBlog) {
       throw new BadRequestException('Блог не найден')
     }
 
-    const hashedPassword = await bcrypt.hash(comment.author.password, 10)
     
     return this.prisma.comment.create({
       data: {
         text: comment.text,
-        author: {
-          connectOrCreate: {
-            where: { email: comment.author.email },
-            create: {
-              email: comment.author.email,
-              name: comment.author.name,
-              password: hashedPassword
-            }
-          }
-        },
-        blog: {
-          connect: {
-            id: blogId
-          }
-        }
+        authorId: userId,
+        blogId: blogId
       },
       include: {
-        author: true,
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        },
         blog: true
       }
     })
   }
 
-  async deleteBlog(blogId: string) {
+  async deleteBlog(userId: string, blogId: string) {
     const existingBlog = await this.prisma.blog.findUnique({
       where: { id: blogId }
     });
-
     if(!existingBlog) {
       throw new BadRequestException('Блог не найден');
+    }
+
+    if(existingBlog.authorId !== userId) {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userId
+        }
+      })
+
+      if(user?.role !== 'ADMIN') throw new BadRequestException({ message: 'Вы можете удалять только свои блоги' })
     }
 
     return this.prisma.blog.delete({

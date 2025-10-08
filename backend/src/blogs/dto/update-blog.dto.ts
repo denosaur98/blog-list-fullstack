@@ -1,4 +1,4 @@
-import { IsString, IsOptional, ValidateNested } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class UpdateBlog {
   @IsString({ message: 'Название должно быть строкой' })
