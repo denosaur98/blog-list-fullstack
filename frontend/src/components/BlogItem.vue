@@ -5,11 +5,19 @@
         <font-awesome-icon icon="fa-solid fa-comment" />
         Комментировать
       </button>
-      <button class="base-button background-green" @click="openPopup('update')">
+      <button
+        v-if="authStore.user.id === props.blogData?.author.id"
+        class="base-button background-green"
+        @click="openPopup('update')"
+      >
         <font-awesome-icon icon="fa-solid fa-pen-to-square" />
         Редактировать
       </button>
-      <button class="base-button background-red" @click="blogStore.deleteBlog(props.blogData?.id)">
+      <button
+        v-if="authStore.user.id === props.blogData?.author.id"
+        class="base-button background-red"
+        @click="blogStore.deleteBlog(props.blogData?.id)"
+      >
         <font-awesome-icon icon="fa-solid fa-trash" />
         Удалить
       </button>
