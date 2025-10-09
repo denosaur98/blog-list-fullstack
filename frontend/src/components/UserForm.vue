@@ -25,7 +25,7 @@
     <div class="form__buttons-wrapper">
       <button
         :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
-        type="button"
+        :type="props.type === 'auth' ? 'button' : 'submit'"
         style="width: 100%;"
         @click="props.type === 'auth' ? auth() : updateUser()"
         :disabled="!validateForm"
@@ -83,11 +83,21 @@ const name = ref<string>('')
 const password = ref<string>('')
 
 const validateForm = computed<boolean>(() => {
-  if(email.value.trim() !== '' && password.value.trim() !== '') {
-    return true
-  } else {
-    return false
+  if(props.type === 'auth') {
+    if(email.value.trim() !== '' && password.value.trim() !== '') {
+      return true
+    } else {
+      return false
+    }
+  } else if(props.type === 'update') {
+    if(email.value.trim() !== '' || password.value.trim() !== '' || name.value.trim() !== '') {
+      return true
+    } else {
+      return false
+    }
   }
+
+  return false
 })
 
 async function auth(): Promise<void> {
@@ -109,9 +119,9 @@ async function auth(): Promise<void> {
 }
 async function updateUser() {
   const newUserData: UserInterface = {
-    email: email.value,
-    name: name.value,
-    password: password.value
+    email: email.value || '',
+    name: name.value || '',
+    password: password.value || ''
   }
 
   await store.updateUser(newUserData)

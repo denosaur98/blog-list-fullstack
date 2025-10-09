@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { AuthService } from './auth.service';
 import { Register } from './dto/register.dto';
 import { Login } from './dto/login.dto';
+import { UpdateUser } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('auth')
@@ -25,7 +26,7 @@ export class AuthController {
 
   @Patch('/:id')
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Param('id') userId: string, @Body() user: Register) {
+  async updateUser(@Param('id') userId: string, @Body() user: UpdateUser) {
     return await this.authService.updateUser(userId, user)
   }
 

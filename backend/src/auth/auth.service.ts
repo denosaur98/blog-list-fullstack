@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'utils/prisma.service';
 import { Register } from './dto/register.dto';
 import { Login } from './dto/login.dto';
+import { UpdateUser } from './dto/update-user.dto';
 import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 
@@ -70,7 +71,7 @@ export class AuthService {
     }
   }
 
-  async updateUser(userId: string, user: Register) {
+  async updateUser(userId: string, user: UpdateUser) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         id: userId
@@ -88,16 +89,35 @@ export class AuthService {
       if(userWithSameEmail) throw new BadRequestException({ message: 'Пользователь с такой почтой уже существует' })
     }
 
-    const hashedPassword = await bcrypt.hash(user.password, 10)
+    let emailToUpdate: string
+    if(!user.email || user.email.trim() === '') {
+      emailToUpdate = existingUser.email
+    } else {
+      emailToUpdate = user.email
+    }
+
+    let nameToUpdate: string | null = user.name || existingUser.name
+    if(!user.name || user.name.trim() === '') {
+      nameToUpdate = existingUser.name
+    } else {
+      nameToUpdate = user.name
+    }
+
+    let passwordToUpdate: string
+    if (!user.password || user.password.trim() === '') {
+      passwordToUpdate = existingUser.password
+    } else {
+      passwordToUpdate = await bcrypt.hash(user.password, 10)
+    }
 
     const updateUser = await this.prisma.user.update({
       where: {
         id: userId
       },
       data: {
-        email: user.email,
-        name: user.name,
-        password: hashedPassword
+        email: emailToUpdate,
+        name: nameToUpdate,
+        password: passwordToUpdate
       }
     })
 
