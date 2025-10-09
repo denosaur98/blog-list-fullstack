@@ -25,7 +25,7 @@
     <div class="form__buttons-wrapper">
       <button
         :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
-        :type="props.type === 'auth' ? 'button' : 'submit'"
+        type="button"
         style="width: 100%;"
         @click="props.type === 'auth' ? auth() : updateUser()"
         :disabled="!validateForm"
@@ -125,6 +125,9 @@ async function updateUser() {
   }
 
   await store.updateUser(newUserData)
+
+  email.value = store.user.email || ''
+  name.value = store.user.name || ''
 }
 
 onMounted(() => {
