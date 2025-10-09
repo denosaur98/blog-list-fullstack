@@ -43,7 +43,7 @@ export class BlogsService {
       throw new BadRequestException({ message: 'Блог с таким названием уже существует' });
     }
 
-    return this.prisma.blog.create({
+    return await this.prisma.blog.create({
       data: {
         title: blog.title,
         description: blog.description,
@@ -69,7 +69,7 @@ export class BlogsService {
       throw new BadRequestException('Блог не найден');
     }
 
-    if(existingBlog.authorId === userId) {
+    if(existingBlog.authorId !== userId) {
       const user = await this.prisma.user.findUnique({
         where: {
           id: userId
@@ -78,7 +78,7 @@ export class BlogsService {
       if(user?.role !== 'ADMIN') throw new BadRequestException({ message: 'Вы можете редактировать только свои блоги' })
     }
 
-    return this.prisma.blog.update({
+    return await this.prisma.blog.update({
       where: { id: blogId },
       data: {
         title: blog.title,
@@ -105,9 +105,8 @@ export class BlogsService {
     if(!existingBlog) {
       throw new BadRequestException('Блог не найден')
     }
-
     
-    return this.prisma.comment.create({
+    return await this.prisma.comment.create({
       data: {
         text: comment.text,
         authorId: userId,
@@ -144,7 +143,7 @@ export class BlogsService {
       if(user?.role !== 'ADMIN') throw new BadRequestException({ message: 'Вы можете удалять только свои блоги' })
     }
 
-    return this.prisma.blog.delete({
+    return await this.prisma.blog.delete({
       where: { id: blogId }
     });
   }

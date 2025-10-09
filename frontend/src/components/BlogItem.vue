@@ -9,14 +9,14 @@
         <font-awesome-icon icon="fa-solid fa-pen-to-square" />
         Редактировать
       </button>
-      <button class="base-button background-red" @click="blogStore.deleteBlog(props.blogData.id)">
+      <button class="base-button background-red" @click="blogStore.deleteBlog(props.blogData?.id)">
         <font-awesome-icon icon="fa-solid fa-trash" />
         Удалить
       </button>
     </div>
-    <h2 class="base-title">{{ props.blogData.title }}</h2>
+    <h2 class="base-title">{{ props.blogData?.title }}</h2>
     <div class="item__text-wrapper">
-      <p class="base-description">{{ props.blogData.description }}</p>
+      <p class="base-description">{{ props.blogData?.description }}</p>
     </div>
     <div class="item__comments-wrapper">
       <button class="base-button" @click="toggleComments">
@@ -26,8 +26,8 @@
       <Transition name="fade">
         <div class="comments__list" v-if="isCommentsOpen">
           <div class="list__comment-item"
-            v-if="props.blogData.comments.length > 0"
-            v-for="comment in props.blogData.comments"
+            v-if="props.blogData?.comments.length > 0"
+            v-for="comment in props.blogData?.comments"
             :key="comment.id"
           >
             <div class="item__text-wrapper">
@@ -45,8 +45,8 @@
       </Transition>
     </div>
     <div class="item__info bottom10 right10">
-      <p class="info__text"><span>Автор: </span>{{ props.blogData.author.email }}</p>
-      <p class="info__text">{{ useDateFormat(props.blogData.createdAt, 'DD:MM:YYYY HH:mm:ss') }}</p>
+      <p class="info__text"><span>Автор: </span>{{ props.blogData?.author.email }}</p>
+      <p class="info__text">{{ useDateFormat(props.blogData?.createdAt, 'DD:MM:YYYY HH:mm:ss') }}</p>
     </div>
   </div>
   <Transition name="fade">
@@ -90,7 +90,7 @@ function toggleComments(): void {
 }
 
 const isYourBlog = computed(() => {
-  return props.blogData.author.id === authStore.user.id
+  return props.blogData?.author.id === authStore.user.id
 })
 </script>
 

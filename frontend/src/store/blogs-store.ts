@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useAuthStore } from './auth-store';
 import axios from 'axios';
 import type { BlogInterface } from '../interfaces/blog-interface';
 import type { CommentInterface } from '../interfaces/comment-interface';
@@ -10,6 +11,7 @@ const notyf = new Notyf()
 export const useBlogsStore = defineStore('blogs', {
   state: () => {
     return {
+      token: useAuthStore().user.access_token,
       blogsList: []
     }
   },
@@ -30,7 +32,16 @@ export const useBlogsStore = defineStore('blogs', {
 
     async createBlog(blog: BlogInterface): Promise<void> {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/blogs`, blog)
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/blogs`,
+          blog,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.token}`
+            }
+          }
+        )
 
         this.fetchAllBlogs()
 
@@ -45,7 +56,16 @@ export const useBlogsStore = defineStore('blogs', {
 
     async updateBlog(blogId: BlogInterface, blog: BlogInterface): Promise<void> {
       try {
-        const response = await axios.patch(`${import.meta.env.VITE_API_URL}/blogs/${blogId}`, blog)
+        const response = await axios.patch(
+          `${import.meta.env.VITE_API_URL}/blogs/${blogId}`,
+          blog,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.token}`
+            }
+          }
+        )
 
         this.fetchAllBlogs()
 
@@ -60,7 +80,16 @@ export const useBlogsStore = defineStore('blogs', {
 
     async addComment(blogId: BlogInterface, comment: CommentInterface): Promise<void> {
       try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/blogs/${blogId}/comments`, comment)
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/blogs/${blogId}/comments`,
+          comment,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.token}`
+            }
+          }
+        )
 
         this.fetchAllBlogs()
 
@@ -75,7 +104,15 @@ export const useBlogsStore = defineStore('blogs', {
 
     async deleteBlog(id: BlogInterface): Promise<void> {
       try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/blogs/${id}`)
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}/blogs/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.token}`
+            }
+          }
+        )
 
         this.fetchAllBlogs()
 

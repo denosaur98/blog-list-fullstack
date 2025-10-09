@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/${type}`, authUser)
 
         this.user = {
-          id: response.data.id,
+          id: response.data.userId,
           access_token: response.data.access_token,
           email: response.data.email,
         }
