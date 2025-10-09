@@ -1,15 +1,18 @@
 <template>
   <header class="header-item">
     <div class="header__user">
-      <font-awesome-icon icon="fa-solid fa-user-circle" class="user__icon"/>
-      <p class="user__mail">{{ store.user.email }}</p>
-      <button class="logout__action-button" @click="logout">Выйти</button>
+      <RouterLink to="/profile" class="user-link">
+        <font-awesome-icon icon="fa-solid fa-user-circle" class="user__icon"/>
+        <p class="user__mail">{{ store.user.email }}</p>
+      </RouterLink>
+      <RouterLink to="/" class="base-link" style="margin-bottom: 5px;">Главная</RouterLink>
+      <button class="base-link" @click="logout">Выйти</button>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 
 const router = useRouter()
@@ -39,32 +42,34 @@ async function logout(): Promise<void> {
     background: var(--base-white);
     box-shadow: 1px 1px 5px 1px var(--base-black);
     border-radius: 5px;
+    width: 150px;
     padding: 10px;
-    gap: 10px;
 
-    .user__icon {
-      width: 40px;
-      height: 40px;
-      color: var(--base-black);
-    }
-
-    .user__mail {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--base-black);
-      margin-top: 5px 0 15px;
-    }
-
-    .logout__action-button {
-      cursor: pointer;
+    .user-link {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      border: none;
-      background: none;
-      font-size: 15px;
-      font-weight: 400;
-      color: var(--base-black);
+      margin-bottom: 15px;
+      text-decoration: none;
+      width: 100%;
+      gap: 5px;
+
+      .user__icon {
+        width: 45px;
+        height: 45px;
+        color: var(--base-black);
+      }
+
+      .user__mail {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--base-black);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        width: 100%;
+      }
     }
   }
 }

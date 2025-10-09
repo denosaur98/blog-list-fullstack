@@ -81,6 +81,19 @@ input, textarea {
   }
 }
 
+.base-link {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--base-black);
+  text-decoration: underline;
+}
+
 .base-title {
   color: var(--base-black);
   font-size: 30px;
@@ -90,6 +103,12 @@ input, textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
+
+  @media (max-width: 900px) {
+    font-size: 25px;
+  }
+
+  span { color: var(--base-grey); }
 }
 
 .base-description {
