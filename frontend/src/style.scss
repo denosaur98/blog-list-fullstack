@@ -2,6 +2,7 @@
   --base-black: #131313;
   --base-white: #fdf5f5;
   --base-grey: #b6b6b6;
+  --base-light-grey: #dfdfdf;
   --base-green: #b5ffa2;
   --base-red: #ff4c4c;
   --base-blue: #8c84ff;
@@ -72,12 +73,13 @@ input, textarea {
   font-weight: 400;
   padding: 7px 15px;
   gap: 10px;
+  transition: .5s;
 
   &.disabled {
     cursor: not-allowed;
     background: var(--base-grey) !important;
     border: 1px solid var(--base-grey) !important;
-    color: var(--base-white) !important;
+    color: var(--base-light-grey) !important;
   }
 }
 
@@ -92,6 +94,13 @@ input, textarea {
   font-weight: 400;
   color: var(--base-black);
   text-decoration: underline;
+  transition: .5s;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--base-yellow);
+    }
+  }
 }
 
 .base-title {
