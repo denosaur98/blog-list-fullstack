@@ -24,7 +24,7 @@ export const useBlogsStore = defineStore('blogs', {
         this.blogsList = response.data.reverse()
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при загрузке блогов: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при загрузке блогов: ${error.response?.data?.message}`);
       }
@@ -48,7 +48,7 @@ export const useBlogsStore = defineStore('blogs', {
         notyf.success('Блог успешно создан');
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при создании блога: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при создании блога: ${error.response?.data?.message}`);
       }
@@ -72,7 +72,7 @@ export const useBlogsStore = defineStore('blogs', {
         notyf.success('Блог успешно обновлен!');
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при обновлении блога: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при обновлении блога: ${error.response?.data?.message}`);
       }
@@ -96,7 +96,7 @@ export const useBlogsStore = defineStore('blogs', {
         notyf.success('Комментарий успешно добавлен!');
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при добавлении комментария: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при добавлении комментария: ${error.response?.data?.message}`);
       }
@@ -119,7 +119,7 @@ export const useBlogsStore = defineStore('blogs', {
         notyf.success('Блог успешно удален!');
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при удалении блога: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при удалении блога: ${error.response?.data?.message}`);
       }

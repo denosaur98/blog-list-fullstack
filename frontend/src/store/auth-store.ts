@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
         notyf.success(`Вы вошли как ${this.user.name}`);
 
         return 'success'
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error.response?.data?.message}`);
       }
@@ -63,13 +63,37 @@ export const useAuthStore = defineStore('auth', {
         notyf.success(`Данные пользователя ${this.user.name} успешно обновлены`);
 
         return response.data
-      } catch(error) {
+      } catch(error: any) {
         console.error(`Ошибка при редактировании пользователя: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при редактировании пользователя: ${error.response?.data?.message}`);
       }
     },
 
+    async deleteUser(): Promise<void> {
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}/auth/${this.user.id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.user.access_token}`
+            }
+          }
+        )
+
+        await this.logout()
+        notyf.success(`Пользователь ${this.user.name} успешно удалён`)
+
+        response.data
+      } catch(error: any) {
+        console.error(`Ошибка при удалении пользователя: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при удалении пользователя: ${error.response?.data?.message}`);
+      }
+    },
+
     async logout(): Promise<Object> {
+      window.location.reload()
+
       return this.user = {
         id: null,
         email: null,

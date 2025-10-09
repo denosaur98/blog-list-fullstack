@@ -22,15 +22,26 @@
       <input class="base-input" placeholder="Введите имя:" v-model="name" v-if="changeButtonActive === 'register' || props.type === 'update'">
       <input class="base-input" :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'" v-model="password" type="password">
     </div>
-    <button
-      :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
-      type="button"
-      style="width: 100%;"
-      @click="props.type === 'auth' ? auth() : updateUser()"
-      :disabled="!validateForm"
-    >
-      Отправить
-    </button>
+    <div class="form__buttons-wrapper">
+      <button
+        :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
+        type="button"
+        style="width: 100%;"
+        @click="props.type === 'auth' ? auth() : updateUser()"
+        :disabled="!validateForm"
+      >
+        Отправить
+      </button>
+      <button
+        v-if="props.type === 'update'"
+        class="base-button background-red"
+        type="button"
+        style="width: 100%;"
+        @click="store.deleteUser"
+      >
+        Удалить профиль
+      </button>
+    </div>
   </form>
 </template>
 
@@ -172,6 +183,19 @@ onMounted(() => {
     height: 120px;
     margin: 30px 0;
     gap: 10px;
+  }
+
+  .form__buttons-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+
+    .background-red { color: var(--base-white); border: 1px solid var(--base-red); }
   }
 }
 </style>
