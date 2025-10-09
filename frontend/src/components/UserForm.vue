@@ -19,8 +19,23 @@
     </div>
     <div class="form__actions-wrapper">
       <input class="base-input" placeholder="Введите почту:" v-model="email">
-      <input class="base-input" placeholder="Введите имя:" v-model="name" v-if="changeButtonActive === 'register' || props.type === 'update'">
-      <input class="base-input" :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'" v-model="password" type="password">
+      <input
+        v-if="changeButtonActive === 'register' || props.type === 'update'"
+        class="base-input"
+        placeholder="Введите имя:"
+        v-model="name"
+      >
+      <div class="password__input-wrapper">
+        <input
+          class="base-input"
+          :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'"
+          v-model="password"
+          :type="isPasswordOpen ? 'text' : 'password'"
+        >
+        <button class="open__password-button" @click="togglePassword" type="button">
+          <font-awesome-icon icon="fa-solid fa-eye"/>
+        </button>
+      </div>
     </div>
     <div class="form__buttons-wrapper">
       <button
@@ -128,6 +143,15 @@ async function updateUser() {
 
   email.value = store.user.email || ''
   name.value = store.user.name || ''
+}
+
+const isPasswordOpen = ref<boolean>(false)
+function togglePassword() {
+  isPasswordOpen.value = !isPasswordOpen.value
+
+  setTimeout(() => {
+    isPasswordOpen.value = false
+  }, 5000)
 }
 
 onMounted(() => {
