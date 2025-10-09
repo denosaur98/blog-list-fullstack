@@ -20,13 +20,13 @@
     <div class="form__actions-wrapper">
       <input class="base-input" placeholder="Введите почту:" v-model="email">
       <input class="base-input" placeholder="Введите имя:" v-model="name" v-if="changeButtonActive === 'register' || props.type === 'update'">
-      <input class="base-input" placeholder="Введите пароль:" v-model="password">
+      <input class="base-input" :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'" v-model="password">
     </div>
     <button
       :class="validateForm ? 'base-button background-green' : 'base-button disabled'"
       type="button"
       style="width: 100%;"
-      @click="auth"
+      @click="props.type === 'auth' ? auth() : updateUser()"
       :disabled="!validateForm"
     >
       Отправить
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed, defineProps, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 import type { UserInterface } from '../interfaces/user-interface'
@@ -94,7 +94,22 @@ async function auth(): Promise<void> {
     router.push('/')
   }
 }
+async function updateUser() {
+  const newUserData: UserInterface = {
+    email: email.value,
+    name: name.value,
+    password: password.value
+  }
 
+  await store.updateUser(newUserData)
+}
+
+onMounted(() => {
+  if(props.type === 'update') {
+    email.value = store.user.email
+    name.value = store.user.name
+  }
+})
 </script>
 
 <style lang="scss" scoped>
