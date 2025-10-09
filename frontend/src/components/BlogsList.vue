@@ -20,12 +20,13 @@ import { ref, computed, onMounted } from 'vue';
 import { useBlogsStore } from '../store/blogs-store';
 import ActionItem from './ActionItem.vue';
 import BlogItem from './BlogItem.vue';
+import type { BlogInterface } from '../interfaces/blog-interface';
 
 const store = useBlogsStore()
 
-const searchValue = ref<String>('')
-const filteredBlogs = computed<Array<[]>>(() => {
-  return store.blogsList.filter(b => b.title.toLowerCase().includes(searchValue.value))
+const searchValue = ref<string>('')
+const filteredBlogs = computed(() => {
+  return store.blogsList.filter((b: BlogInterface) => b.title.toLowerCase().includes(searchValue.value))
 })
 
 onMounted(async() => {

@@ -12,7 +12,7 @@ export const useBlogsStore = defineStore('blogs', {
   state: () => {
     return {
       token: useAuthStore().user.access_token,
-      blogsList: []
+      blogsList: [] as BlogInterface[]
     }
   },
 

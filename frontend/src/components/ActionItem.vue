@@ -4,7 +4,7 @@
       class="base-input"
       placeholder="Введите название блога:"
       :value="props.modelValue"
-      @input="emit('update:modelValue', $event.target.value)"
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
     <button class="base-button" @click="openPopup('create')">
       <font-awesome-icon icon="fa-solid fa-plus" />
@@ -30,8 +30,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const isPopupOpen = ref<Boolean>(false)
-const popupType = ref<String>('')
+const isPopupOpen = ref<boolean>(false)
+const popupType = ref<string>('')
 function openPopup(type: string): void {
   isPopupOpen.value = true
   popupType.value = type

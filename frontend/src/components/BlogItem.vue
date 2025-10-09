@@ -73,8 +73,8 @@ const props = defineProps({
   blogData: Object
 })
 
-const isPopupOpen = ref<Boolean>(false)
-const popupType = ref<String>('')
+const isPopupOpen = ref<boolean>(false)
+const popupType = ref<string>('')
 function openPopup(type: string): void {
   isPopupOpen.value = true
   popupType.value = type
@@ -84,7 +84,7 @@ function closePopup(): void {
   popupType.value = ''
 }
 
-const isCommentsOpen = ref<Boolean>(false)
+const isCommentsOpen = ref<boolean>(false)
 function toggleComments(): void {
   isCommentsOpen.value = !isCommentsOpen.value
 }

@@ -60,11 +60,11 @@ const props = defineProps({
 const router = useRouter()
 const store = useAuthStore()
 
-const changeButtonActive = ref<String>('login')
+const changeButtonActive = ref<string>('login')
 function changeFormType(type: string) {
   changeButtonActive.value = type
 }
-const formTypeTitle = computed<String>(() => {
+const formTypeTitle = computed<string>(() => {
   if(props.type === 'auth') {
     if(changeButtonActive.value === 'login') {
       return 'Авторизация'
@@ -74,13 +74,15 @@ const formTypeTitle = computed<String>(() => {
   } else if(props.type === 'update') {
     return `Редактировать пользователя\n<span>${store.user.email}</span>`
   }
+
+  return ''
 })
 
-const email = ref<String>('')
-const name = ref<String>('')
-const password = ref<String>('')
+const email = ref<string>('')
+const name = ref<string>('')
+const password = ref<string>('')
 
-const validateForm = computed<Boolean>(() => {
+const validateForm = computed<boolean>(() => {
   if(email.value.trim() !== '' && password.value.trim() !== '') {
     return true
   } else {
@@ -117,8 +119,8 @@ async function updateUser() {
 
 onMounted(() => {
   if(props.type === 'update') {
-    email.value = store.user.email
-    name.value = store.user.name
+    email.value = store.user.email || ''
+    name.value = store.user.name || ''
   }
 })
 </script>

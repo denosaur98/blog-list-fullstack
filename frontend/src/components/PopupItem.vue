@@ -43,7 +43,7 @@ const emit = defineEmits(['close'])
 
 const store = useBlogsStore()
 
-const popupTypeTitle = computed<String>(() => {
+const popupTypeTitle = computed<string>(() => {
   if(props.type === 'create') {
     return 'Создать блог'
   } else if(props.type === 'update') {
@@ -53,10 +53,10 @@ const popupTypeTitle = computed<String>(() => {
   }
 })
 
-const title = ref<String>('')
-const description = ref<String>('')
+const title = ref<string>('')
+const description = ref<string>('')
 
-const validateForm = computed<Boolean>(() => {
+const validateForm = computed<boolean>(() => {
   if(props.type === 'create') {
     if(title.value.trim() !== '') {
       return true
@@ -76,6 +76,8 @@ const validateForm = computed<Boolean>(() => {
       return false
     }
   }
+
+  return false
 })
 
 function popupTypeAction(): void {
