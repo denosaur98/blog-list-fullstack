@@ -33,8 +33,8 @@ export const useAuthStore = defineStore('auth', {
 
         return 'success'
       } catch(error) {
-        console.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error}`)
-        notyf.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error}`);
+        console.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error.response?.data?.message}`);
       }
     },
 
@@ -60,8 +60,8 @@ export const useAuthStore = defineStore('auth', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при редактировании пользователя: ${error}`)
-        notyf.error(`Ошибка при редактировании пользователя: ${error}`);
+        console.error(`Ошибка при редактировании пользователя: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при редактировании пользователя: ${error.response?.data?.message}`);
       }
     },
 

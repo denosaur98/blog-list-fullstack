@@ -25,8 +25,8 @@ export const useBlogsStore = defineStore('blogs', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при загрузке блогов: ${error}`)
-        notyf.error(`Ошибка при загрузке блогов: ${error}`);
+        console.error(`Ошибка при загрузке блогов: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при загрузке блогов: ${error.response?.data?.message}`);
       }
     },
 
@@ -49,8 +49,8 @@ export const useBlogsStore = defineStore('blogs', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при создании блога: ${error}`)
-        notyf.error(`Ошибка при создании блога: ${error}`);
+        console.error(`Ошибка при создании блога: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при создании блога: ${error.response?.data?.message}`);
       }
     },
 
@@ -73,8 +73,8 @@ export const useBlogsStore = defineStore('blogs', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при обновлении блога: ${error}`)
-        notyf.error(`Ошибка при обновлении блога: ${error}`);
+        console.error(`Ошибка при обновлении блога: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при обновлении блога: ${error.response?.data?.message}`);
       }
     },
 
@@ -97,8 +97,8 @@ export const useBlogsStore = defineStore('blogs', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при добавлении комментария: ${error}`)
-        notyf.error(`Ошибка при добавлении комментария: ${error}`);
+        console.error(`Ошибка при добавлении комментария: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при добавлении комментария: ${error.response?.data?.message}`);
       }
     },
 
@@ -120,8 +120,8 @@ export const useBlogsStore = defineStore('blogs', {
 
         return response.data
       } catch(error) {
-        console.error(`Ошибка при удалении блога: ${error}`)
-        notyf.error(`Ошибка при удалении блога: ${error}`);
+        console.error(`Ошибка при удалении блога: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при удалении блога: ${error.response?.data?.message}`);
       }
     }
   }
