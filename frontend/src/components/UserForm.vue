@@ -20,7 +20,7 @@
     <div class="form__actions-wrapper">
       <input class="base-input" placeholder="Введите почту:" v-model="email">
       <input class="base-input" placeholder="Введите имя:" v-model="name" v-if="changeButtonActive === 'register' || props.type === 'update'">
-      <input class="base-input" :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'" v-model="password">
+      <input class="base-input" :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'" v-model="password" type="password">
     </div>
     <button
       :class="validateForm ? 'base-button background-green' : 'base-button disabled'"

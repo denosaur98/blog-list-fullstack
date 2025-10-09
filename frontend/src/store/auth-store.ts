@@ -31,6 +31,8 @@ export const useAuthStore = defineStore('auth', {
           name: response.data.name
         }
 
+        notyf.success(`Вы вошли как ${this.user.name}`);
+
         return 'success'
       } catch(error) {
         console.error(`Ошибка при ${type === 'login' ? 'авторизации' : 'регистрации'}: ${error.response?.data?.message}`)
@@ -52,11 +54,13 @@ export const useAuthStore = defineStore('auth', {
         )
 
         this.user = {
-          id: response.data.id,
+          id: response.data.userId,
           access_token: response.data.access_token,
           email: response.data.email,
           name: response.data.name
         }
+
+        notyf.success(`Данные пользователя ${this.user.name} успешно обновлены`);
 
         return response.data
       } catch(error) {

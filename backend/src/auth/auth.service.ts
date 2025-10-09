@@ -40,7 +40,8 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       userId: newUser.id,
-      email: newUser.email
+      email: newUser.email,
+      name: newUser.name
     }
   }
 
@@ -64,7 +65,8 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       userId: existingUser.id,
-      email: existingUser.email
+      email: existingUser.email,
+      name: existingUser.name
     }
   }
 
@@ -74,7 +76,6 @@ export class AuthService {
         id: userId
       }
     })
-
     if(!existingUser) throw new BadRequestException({ message: 'Пользователь с таким id не найден' })
     
     if(user.email !== existingUser.email) {
@@ -87,12 +88,9 @@ export class AuthService {
       if(userWithSameEmail) throw new BadRequestException({ message: 'Пользователь с такой почтой уже существует' })
     }
 
-    let hashedPassword = existingUser.password
-    if(user.password) {
-      hashedPassword = await bcrypt.hash(user.password, 10)
-    }
+    const hashedPassword = await bcrypt.hash(user.password, 10)
 
-    return await this.prisma.user.update({
+    const updateUser = await this.prisma.user.update({
       where: {
         id: userId
       },
@@ -102,6 +100,19 @@ export class AuthService {
         password: hashedPassword
       }
     })
+
+    const payload = {
+      sub: updateUser.id,
+      email: updateUser.email,
+      name: updateUser.name,
+    }
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      userId: updateUser.id,
+      email: updateUser.email,
+      name: updateUser.name
+    }
   }
 
   async deleteUser(userId: string) {
