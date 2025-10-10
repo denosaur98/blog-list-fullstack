@@ -83,17 +83,39 @@ const props = defineProps({
 const router = useRouter()
 const store = useAuthStore()
 
+let timerId: ReturnType<typeof setTimeout> | null = null
+const isPasswordOpen = ref<boolean>(false)
+function togglePassword() {
+  isPasswordOpen.value = !isPasswordOpen.value
+
+  if(timerId) {
+    clearTimeout(timerId)
+  }
+
+  timerId = setTimeout(() => {
+    isPasswordOpen.value = false
+    timerId = null
+  }, 5000)
+}
+
 const loginFormData = useSessionStorage('login-form', {
   email: '',
   password: ''
 })
-const registerFormData = useSessionStorage('register-from', {
+const registerFormData = useSessionStorage('register-form', {
   email: '',
   name: '',
   password: ''
 })
 const changeButtonActive = ref<string>('login')
 function changeFormType(type: string) {
+  if(timerId) {
+    clearTimeout(timerId)
+    timerId = null
+  }
+
+  isPasswordOpen.value = false
+
   saveCurrentFormData()
 
   changeButtonActive.value = type
@@ -194,15 +216,6 @@ async function updateUser() {
 
   email.value = store.user.email || ''
   name.value = store.user.name || ''
-}
-
-const isPasswordOpen = ref<boolean>(false)
-function togglePassword() {
-  isPasswordOpen.value = !isPasswordOpen.value
-
-  setTimeout(() => {
-    isPasswordOpen.value = false
-  }, 5000)
 }
 
 onMounted(() => {
