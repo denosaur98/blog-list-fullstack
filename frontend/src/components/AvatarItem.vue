@@ -24,7 +24,13 @@
         class="item__none-icon"
       />
     </button>
-    <button class="base-link" @click="store.deleteAvatar" type="button">Удалить изображение</button>
+    <button class="base-link"
+      v-if="store.user.avatar !== null"
+      @click="store.deleteAvatar"
+      type="button"
+    >
+      Удалить изображение
+    </button>
   </div>
 </template>
 

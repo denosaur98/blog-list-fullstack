@@ -42,7 +42,7 @@
               <p class="base-description">{{ comment.text }}</p>
             </div>
             <div class="item__info bottom5 right5">
-              <p class="info__text"><span>Автор: </span>{{ comment.author.email }}</p>
+              <p class="info__text"><span>Комментарий от: </span>{{ comment.author.email }}</p>
               <p class="info__text">{{ useDateFormat(comment.createdAt, 'DD:MM:YYYY HH:mm:ss') }}</p>
             </div>
           </div>
@@ -53,7 +53,7 @@
       </Transition>
     </div>
     <div class="item__info bottom10 right10">
-      <p class="info__text"><span>Автор: </span>{{ props.blogData?.author.email }}</p>
+      <p class="info__text"><span>Пост от: </span>{{ props.blogData?.author.email }}</p>
       <p class="info__text">{{ useDateFormat(props.blogData?.createdAt, 'DD:MM:YYYY HH:mm:ss') }}</p>
     </div>
   </div>
@@ -150,7 +150,7 @@ const isYourBlog = computed(() => {
     &.right10 { right: 10px; }
 
     .info__text {
-      font-size: 12px;
+      font-size: 10px;
       color: var(--base-grey);
       font-weight: 400;
 
