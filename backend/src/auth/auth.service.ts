@@ -137,7 +137,8 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       userId: updateUser.id,
       email: updateUser.email,
-      name: updateUser.name
+      name: updateUser.name,
+      avatar: updateUser.avatar
     }
   }
 

@@ -134,7 +134,7 @@ export const useAuthStore = defineStore('auth', {
 
         notyf.success(`Аватарка успешно удалена`)
 
-        response.data
+        return response.data
       } catch(error: any) {
         console.error(`Ошибка при удалении аватарки: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при удалении аватарки: ${error.response?.data?.message}`);
