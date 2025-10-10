@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, onMounted } from 'vue';
+import { ref, computed, defineProps, onMounted, onUnmounted } from 'vue';
 import { useSessionStorage } from '@vueuse/core';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
@@ -222,6 +222,11 @@ onMounted(() => {
   if(props.type === 'update') {
     email.value = store.user.email || ''
     name.value = store.user.name || ''
+  }
+})
+onUnmounted(() => {
+  if(timerId) {
+    clearTimeout(timerId)
   }
 })
 </script>
