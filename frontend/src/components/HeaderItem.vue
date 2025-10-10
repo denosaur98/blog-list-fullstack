@@ -1,11 +1,18 @@
 <template>
   <header class="header__user">
     <RouterLink to="/profile" class="user-link">
-      <font-awesome-icon
-        v-if="route.fullPath !== '/profile'"
-        icon="fa-solid fa-user-circle"
-        class="user__icon"
-      />
+      <div class="user__avatar-wrapper">
+        <img
+          :src="getAvatarPath(store.user.avatar)"
+          class="user__icon"
+          v-if="store.user.avatar"
+        >
+        <font-awesome-icon
+          v-else
+          icon="fa-solid fa-user-circle"
+          class="user__icon"
+        />
+      </div>
       <p class="user__info">{{ store.user.email }}</p>
       <p class="user__info">{{ store.user.name }}</p>
     </RouterLink>
@@ -17,6 +24,7 @@
 <script setup lang="ts">
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
+import { getAvatarPath } from '../utils/avatar-path.ts';
 
 const router = useRouter()
 const route = useRoute()
@@ -52,10 +60,18 @@ async function logout(): Promise<void> {
     width: 100%;
     gap: 5px;
 
-    .user__icon {
+    .user__avatar-wrapper {
       width: 45px;
       height: 45px;
-      color: var(--base-black);
+      border-radius: 50%;
+      overflow: hidden;
+
+      .user__icon {
+        width: 100%;
+        height: 100%;
+        color: var(--base-black);
+        object-fit: cover;
+      }
     }
 
     .user__info {

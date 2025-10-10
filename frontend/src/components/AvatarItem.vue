@@ -15,7 +15,7 @@
       >
       <img 
         v-else-if="store.user.avatar"
-        :src="getAvatarUrl(store.user.avatar)" 
+        :src="getAvatarPath(store.user.avatar)" 
         class="item__uploaded-avatar"
       >
       <font-awesome-icon
@@ -31,15 +31,13 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
+import { getAvatarPath } from '../utils/avatar-path.ts';
 
 const route = useRoute()
 const store = useAuthStore()
 const avatarInput = ref<HTMLInputElement>()
 const imagePreview = ref<string>('')
 
-function getAvatarUrl(avatarPath: string) {
-  return `${import.meta.env.VITE_API_URL}${avatarPath}`
-}
 function openFilePicker() {
   if (avatarInput.value) {
     avatarInput.value.click()
