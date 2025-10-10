@@ -32,9 +32,16 @@
           v-model="password"
           :type="isPasswordOpen ? 'text' : 'password'"
         >
-        <button class="open__password-button" @click="togglePassword" type="button">
-          <font-awesome-icon icon="fa-solid fa-eye"/>
-        </button>
+        <Transition name="fade">
+          <button
+            v-if="password.trim() !== ''"
+            class="open__password-button"
+            @click="togglePassword"
+            type="button"
+          >
+            <font-awesome-icon icon="fa-solid fa-eye"/>
+          </button>
+        </Transition>
       </div>
     </div>
     <div class="form__buttons-wrapper">
@@ -62,9 +69,10 @@
 
 <script setup lang="ts">
 import { ref, computed, defineProps, onMounted } from 'vue';
+import { useSessionStorage } from '@vueuse/core';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
-import type { UserInterface } from '../interfaces/user-interface'
+import type { UserInterface } from '../interfaces/user-interface';
 
 const props = defineProps({
   type: {
@@ -75,10 +83,53 @@ const props = defineProps({
 const router = useRouter()
 const store = useAuthStore()
 
+const loginFormData = useSessionStorage('login-form', {
+  email: '',
+  password: ''
+})
+const registerFormData = useSessionStorage('register-from', {
+  email: '',
+  name: '',
+  password: ''
+})
 const changeButtonActive = ref<string>('login')
 function changeFormType(type: string) {
+  saveCurrentFormData()
+
   changeButtonActive.value = type
+
+  loadFormData()
 }
+function saveCurrentFormData() {
+  if(props.type === 'auth') {
+    if(changeButtonActive.value === 'login') {
+      loginFormData.value = {
+        email: email.value,
+        password: password.value
+      }
+    } else if(changeButtonActive.value === 'register') {
+      registerFormData.value = {
+        email: email.value,
+        name: name.value,
+        password: password.value
+      }
+    }
+  }
+}
+function loadFormData() {
+  if(props.type === 'auth') {
+    if(changeButtonActive.value === 'login') {
+      email.value = loginFormData.value.email
+      name.value = ''
+      password.value = loginFormData.value.password
+    } else if(changeButtonActive.value === 'register') {
+      email.value = registerFormData.value.email
+      name.value = registerFormData.value.name
+      password.value = registerFormData.value.password
+    }
+  }
+}
+
 const formTypeTitle = computed<string>(() => {
   if(props.type === 'auth') {
     if(changeButtonActive.value === 'login') {
