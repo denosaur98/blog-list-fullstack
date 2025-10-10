@@ -94,7 +94,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async updateAvatar(file: UserInterface): Promise<void> {
+    async updateAvatar(file: File): Promise<void> {
       try {
         const formData = new FormData()
         formData.append('avatar', file)
@@ -113,7 +113,7 @@ export const useAuthStore = defineStore('auth', {
         this.user.avatar = response.data.avatar
         notyf.success(`Аватарка успешно добавлена`)
 
-        response.data
+        return response.data
       } catch(error: any) {
         console.error(`Ошибка при добавлении аватарки: ${error.response?.data?.message}`)
         notyf.error(`Ошибка при добавлении аватарки: ${error.response?.data?.message}`);

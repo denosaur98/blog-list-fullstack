@@ -40,7 +40,7 @@ export class AuthController {
 
   @Post('avatar/:id')
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(AvatarUploadInterceptor())
   async updateAvatar(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File) {
     return await this.authService.updateAvatar(userId, file)
   }

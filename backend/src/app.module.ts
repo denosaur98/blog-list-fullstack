@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BlogsModule } from './blogs/blogs.module';
 import { AuthModule } from './auth/auth.module';
+import { StaticModule } from './static/static.module';
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
     BlogsModule,
+    StaticModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, JwtStrategy, FileUploadService],

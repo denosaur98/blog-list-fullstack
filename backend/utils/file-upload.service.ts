@@ -28,7 +28,7 @@ export class FileUploadService {
   }
 
   getImageUrl(filename: string): string {
-    return `/uploads/users${filename}`
+    return `/uploads/users/${filename}`
   }
 
   validateFile(file: Express.Multer.File): void {
