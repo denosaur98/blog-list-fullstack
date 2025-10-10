@@ -1,7 +1,11 @@
 <template>
   <header class="header__user">
     <RouterLink to="/profile" class="user-link">
-      <font-awesome-icon icon="fa-solid fa-user-circle" class="user__icon"/>
+      <font-awesome-icon
+        v-if="route.fullPath !== '/profile'"
+        icon="fa-solid fa-user-circle"
+        class="user__icon"
+      />
       <p class="user__info">{{ store.user.email }}</p>
       <p class="user__info">{{ store.user.name }}</p>
     </RouterLink>
@@ -11,10 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 
 const router = useRouter()
+const route = useRoute()
 const store = useAuthStore()
 
 async function logout(): Promise<void> {

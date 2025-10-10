@@ -12,4 +12,8 @@ export class UpdateUser {
   @IsString({ message: 'Пароль должен быть строкой' })
   @IsOptional()
   password: string;
+
+  @IsString({ message: 'Аватарка должна быть строкой' })
+  @IsOptional()
+  avatar: string;
 }

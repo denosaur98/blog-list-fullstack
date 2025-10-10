@@ -1,6 +1,7 @@
 export interface UserInterface {
-  email: String
-  name?: String
-  access_token?: String,
-  password: String
+  email: string
+  name?: string
+  access_token?: string,
+  password: string,
+  avatar?: File
 }

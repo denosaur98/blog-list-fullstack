@@ -17,6 +17,9 @@
         Регистрация
       </button>
     </div>
+    <div class="form__avatar-wrapper" v-if="props.type === 'update'">
+      <AvatarItem/>
+    </div>
     <div class="form__actions-wrapper">
       <input class="base-input" placeholder="Введите почту:" v-model="email">
       <input
@@ -73,6 +76,7 @@ import { useSessionStorage } from '@vueuse/core';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 import type { UserInterface } from '../interfaces/user-interface';
+import AvatarItem from './AvatarItem.vue';
 
 const props = defineProps({
   type: {
@@ -280,6 +284,11 @@ onUnmounted(() => {
         }
       }
     }
+  }
+
+  .form__avatar-wrapper {
+    width: 100px;
+    height: 100px;
   }
 
   .form__actions-wrapper {

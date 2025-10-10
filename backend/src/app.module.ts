@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaService } from 'utils/prisma.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { FileUploadService } from 'utils/file-upload.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BlogsModule } from './blogs/blogs.module';
@@ -20,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     BlogsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, JwtStrategy],
-  exports: [PrismaService, JwtModule, PassportModule, JwtStrategy]
+  providers: [AppService, PrismaService, JwtStrategy, FileUploadService],
+  exports: [PrismaService, JwtModule, PassportModule, JwtStrategy, FileUploadService]
 })
 export class AppModule {}

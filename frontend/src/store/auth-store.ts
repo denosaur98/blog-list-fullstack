@@ -11,10 +11,11 @@ export const useAuthStore = defineStore('auth', {
   state: () => {
     return {
       user: useLocalStorage('user', {
-        id: null,
-        email: null,
-        access_token: null,
-        name: null
+        id: null as string | null,
+        email: null as string | null,
+        access_token: null as string | null,
+        name: null as string | null,
+        avatar: null as string | null
       })
     }
   },
@@ -28,7 +29,8 @@ export const useAuthStore = defineStore('auth', {
           id: response.data.userId,
           access_token: response.data.access_token,
           email: response.data.email,
-          name: response.data.name
+          name: response.data.name,
+          avatar: response.data.avatar || null
         }
 
         notyf.success(`Вы вошли как ${this.user.name}`);
@@ -57,7 +59,8 @@ export const useAuthStore = defineStore('auth', {
           id: response.data.userId,
           access_token: response.data.access_token,
           email: response.data.email,
-          name: response.data.name
+          name: response.data.name,
+          avatar: response.data.avatar
         }
 
         notyf.success(`Данные пользователя ${this.user.name} успешно обновлены`);
@@ -91,6 +94,53 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async updateAvatar(file: UserInterface): Promise<void> {
+      try {
+        const formData = new FormData()
+        formData.append('avatar', file)
+
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/auth/avatar/${this.user.id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${this.user.access_token}`
+            }
+          }
+        )
+
+        this.user.avatar = response.data.avatar
+        notyf.success(`Аватарка успешно добавлена`)
+
+        response.data
+      } catch(error: any) {
+        console.error(`Ошибка при добавлении аватарки: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при добавлении аватарки: ${error.response?.data?.message}`);
+      }
+    },
+
+    async deleteAvatar() {
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_API_URL}/auth/avatar/${this.user.id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${this.user.access_token}`
+            }
+          }
+        )
+
+        notyf.success(`Аватарка успешно удалена`)
+
+        response.data
+      } catch(error: any) {
+        console.error(`Ошибка при удалении аватарки: ${error.response?.data?.message}`)
+        notyf.error(`Ошибка при удалении аватарки: ${error.response?.data?.message}`);
+      }
+    },
+
     async logout(): Promise<Object> {
       window.location.reload()
 
@@ -98,7 +148,8 @@ export const useAuthStore = defineStore('auth', {
         id: null,
         email: null,
         access_token: null,
-        name: null
+        name: null,
+        avatar: null
       }
     }
   }
