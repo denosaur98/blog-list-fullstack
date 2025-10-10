@@ -1,14 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'utils/prisma.service';
+import { FileUploadService } from 'utils/file-upload.service';
 import { Register } from './dto/register.dto';
 import { Login } from './dto/login.dto';
 import { UpdateUser } from './dto/update-user.dto';
 import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+    private fileUploadService: FileUploadService
+  ) {}
 
   async allUsers() {
     return await this.prisma.user.findMany()
@@ -148,5 +154,64 @@ export class AuthService {
         id: userId
       }
     })
+  }
+
+  async updateAvatar(userId: string, file: Express.Multer.File) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    if(!user) throw new BadRequestException({ message: 'Пользователь с таким id не найден' })
+
+    if(user.avatar) {
+      const oldAvatarPath = this.fileUploadService.getImagePath(user.avatar.split('/').pop() || '')
+      if(existsSync(oldAvatarPath)) {
+        unlinkSync(oldAvatarPath)
+      }
+    }
+
+    const avatarUrl = this.fileUploadService.getImageUrl(file.filename)
+    const updateUser = await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        avatar: avatarUrl
+      }
+    })
+
+    return {
+      avatar: updateUser.avatar,
+      message: 'Аватарка успешно обновлена'
+    }
+  }
+
+  async deleteAvatar(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    if (!user) throw new BadRequestException({ message: 'Пользователь с таким id не найден' })
+    if(!user.avatar) throw new BadRequestException({ message: 'Аватарка не найдена' })
+
+    const avatarPath = this.fileUploadService.getImagePath(user.avatar.split('/').pop() || '')
+    if(existsSync(avatarPath)) {
+      unlinkSync(avatarPath)
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        avatar: null
+      }
+    })
+
+    return {
+      message: 'Аватарка успешно удалена'
+    }
   }
 }

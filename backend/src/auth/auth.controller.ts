@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Register } from './dto/register.dto';
 import { Login } from './dto/login.dto';
 import { UpdateUser } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AvatarUploadInterceptor } from '../interceptors/avatar-upload.interceptor';
 
 @Controller('auth')
 export class AuthController {
@@ -34,5 +36,18 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id') userId: string) {
     return await this.authService.deleteUser(userId)
+  }
+
+  @Post('avatar/:id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async updateAvatar(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File) {
+    return await this.authService.updateAvatar(userId, file)
+  }
+
+  @Delete('avatar/:id')
+  @UseGuards(JwtAuthGuard)
+  async deleteAvatar(@Param('id') userId: string) {
+    return await this.authService.deleteAvatar(userId)
   }
 }
