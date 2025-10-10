@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 
@@ -38,9 +38,6 @@ const avatarInput = ref<HTMLInputElement>()
 const imagePreview = ref<string>('')
 
 function getAvatarUrl(avatarPath: string) {
-  if (avatarPath.startsWith('http')) {
-    return avatarPath
-  }
   return `${import.meta.env.VITE_API_URL}${avatarPath}`
 }
 function openFilePicker() {
