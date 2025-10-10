@@ -132,6 +132,7 @@ export const useAuthStore = defineStore('auth', {
           }
         )
 
+        this.user.avatar = response.data.avatar
         notyf.success(`Аватарка успешно удалена`)
 
         return response.data

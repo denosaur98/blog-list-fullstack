@@ -24,6 +24,7 @@
         class="item__none-icon"
       />
     </button>
+    <button class="base-link" @click="store.deleteAvatar" type="button">Удалить изображение</button>
   </div>
 </template>
 
@@ -85,7 +86,6 @@ async function handleFileUpload(event: Event) {
   height: 100%;
 
   .item__avatar-wrapper {
-    position: absolute;
     cursor: pointer;
     width: 100%;
     height: 100%;
@@ -123,5 +123,7 @@ async function handleFileUpload(event: Event) {
       }
     }
   }
+
+  .base-link { margin-top: 10px; }
 }
 </style>

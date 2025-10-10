@@ -287,8 +287,8 @@ onUnmounted(() => {
   }
 
   .form__avatar-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 150px;
   }
 
   .form__actions-wrapper {
