@@ -21,29 +21,43 @@
       <AvatarItem/>
     </div>
     <div class="form__actions-wrapper">
-      <input class="base-input" placeholder="Введите почту:" v-model="email">
-      <input
-        v-if="changeButtonActive === 'register' || props.type === 'update'"
-        class="base-input"
-        placeholder="Введите имя:"
-        v-model="name"
-      >
-      <div class="password__input-wrapper">
+      <div class="base-error-wrapper">
+        <input class="base-input" placeholder="Введите почту:" v-model="email">
+        <Transition name="fade">
+          <p v-if="emailErrorMessage">{{ emailErrorMessage }}</p>
+        </Transition>
+      </div>
+      <div class="base-error-wrapper" v-if="changeButtonActive === 'register' || props.type === 'update'">
         <input
           class="base-input"
-          :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'"
-          v-model="password"
-          :type="isPasswordOpen ? 'text' : 'password'"
+          placeholder="Введите имя:"
+          v-model="name"
         >
         <Transition name="fade">
-          <button
-            v-if="password.trim() !== ''"
-            class="open__password-button"
-            @click="togglePassword"
-            type="button"
+          <p v-if="nameErrorMessage">{{ nameErrorMessage }}</p>
+        </Transition>
+      </div>
+      <div class="base-error-wrapper">
+        <div class="password__input-wrapper">
+          <input
+            class="base-input"
+            :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'"
+            v-model="password"
+            :type="isPasswordOpen ? 'text' : 'password'"
           >
-            <font-awesome-icon icon="fa-solid fa-eye"/>
-          </button>
+          <Transition name="fade">
+            <button
+              v-if="password.trim() !== ''"
+              class="open__password-button"
+              @click="togglePassword"
+              type="button"
+            >
+              <font-awesome-icon icon="fa-solid fa-eye"/>
+            </button>
+          </Transition>
+        </div>
+        <Transition name="fade">
+          <p v-if="passwordErrorMessage">{{ passwordErrorMessage }}</p>
         </Transition>
       </div>
     </div>
@@ -182,33 +196,82 @@ const formTypeTitle = computed<string>(() => {
 const email = ref<string>('')
 const name = ref<string>('')
 const password = ref<string>('')
+const emailErrorMessage = ref<string>('')
+const nameErrorMessage = ref<string>('')
+const passwordErrorMessage = ref<string>('')
 
 const validateForm = computed<boolean>(() => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+  emailErrorMessage.value = ''
+  nameErrorMessage.value = ''
+  passwordErrorMessage.value = ''
   
   if(props.type === 'auth') {
-    if(
-      (email.value.trim() !== '' && emailRegex.test(email.value)) &&
-      (password.value.trim() !== '' && password.value.trim().length >= 5)
-    ) {
-      return true
-    } else {
-      return false
-    }
+    return validateAuth(emailRegex)
   } else if(props.type === 'update') {
-    if(
-      (email.value.trim() !== '' && emailRegex.test(email.value)) ||
-      (password.value.trim() !== '' && password.value.trim().length >= 5) ||
-      name.value.trim() !== ''
-    ) {
-      return true
-    } else {
-      return false
-    }
+    return validateUpdate(emailRegex)
   }
 
   return false
 })
+function validateAuth(emailValid: RegExp) {
+  const errors = []
+
+  if(email.value.trim() === '') {
+    emailErrorMessage.value = 'Почта не может быть пустой'
+    errors.push('email')
+  } else if(!emailValid.test(email.value)) {
+    emailErrorMessage.value = 'Некорректный формат почты'
+    errors.push('email')
+  }
+
+  if(password.value.trim() === '') {
+    passwordErrorMessage.value = 'Пароль не может быть пустым'
+    errors.push('password')
+  } else if(password.value.length < 5) {
+    passwordErrorMessage.value = 'Пароль не может быть короче 5 символов'
+    errors.push('password')
+  }
+
+  if(changeButtonActive.value === 'register' && name.value.trim() !== '' && name.value.trim().length < 2) {
+    nameErrorMessage.value = 'Имя не может быть короче 2 символов'
+    errors.push('name')
+  }
+
+  return errors.length === 0
+}
+function validateUpdate(emailValid: RegExp): boolean {
+  const errors = []
+  let hasValidChanges = false
+  
+  if (email.value.trim() !== '') {
+    if (!emailValid.test(email.value)) {
+      emailErrorMessage.value = 'Некорректный формат почты'
+      errors.push('email')
+    } else {
+      hasValidChanges = true
+    }
+  }
+  
+  if (password.value.trim() !== '') {
+    if (password.value.trim().length < 5) {
+      passwordErrorMessage.value = 'Пароль не может быть короче 5 символов'
+      errors.push('password')
+    } else {
+      hasValidChanges = true
+    }
+  }
+  
+  if (name.value.trim() !== '' && name.value.trim().length < 2) {
+    nameErrorMessage.value = 'Имя не может быть короче 2 символов'
+    errors.push('name')
+  } else {
+    hasValidChanges = true
+  }
+  
+  return hasValidChanges && errors.length === 0
+}
 
 async function auth(): Promise<void> {
   const userReg: UserInterface = {
@@ -249,6 +312,10 @@ function closeConfirmPopup() {
 }
 
 onMounted(() => {
+  emailErrorMessage.value = ''
+  nameErrorMessage.value = ''
+  passwordErrorMessage.value = ''
+
   if(props.type === 'update') {
     email.value = store.user.email || ''
     name.value = store.user.name || ''
@@ -323,9 +390,9 @@ onUnmounted(() => {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: 120px;
+    height: 150px;
     margin: 30px 0;
-    gap: 10px;
+    gap: 20px;
   }
 
   .form__buttons-wrapper {

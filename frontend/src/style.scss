@@ -196,3 +196,17 @@ input, textarea {
     }
   }
 }
+
+.base-error-wrapper {
+  position: relative;
+  width: 100%;
+
+  p {
+    position: absolute;
+    color: var(--base-red);
+    font-size: 10px;
+    font-weight: 400;
+    left: 0;
+    bottom: -14px;
+  }
+}
