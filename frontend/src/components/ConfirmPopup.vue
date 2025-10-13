@@ -39,7 +39,7 @@ const popupTitle = ref<string>('')
 const removeAllUserData = ref<boolean>(false)
 
 const userBlogs = computed<boolean>(() => {
-  const blogs = blogStore.blogsList.filter((b: object) => b.author.id === authStore.user.id)
+  const blogs = blogStore.blogsList.filter((b: any) => b.author.id === authStore.user.id)
 
   return blogs.length > 0
 })
@@ -60,7 +60,7 @@ async function actionType(): Promise<void> {
     emit('close')
   }
 }
-async function deleteUser(agree: string) {
+async function deleteUser(agree: string): Promise<void> {
   await authStore.deleteUser(agree)
 
   emit('close')
