@@ -184,14 +184,23 @@ const name = ref<string>('')
 const password = ref<string>('')
 
 const validateForm = computed<boolean>(() => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  
   if(props.type === 'auth') {
-    if(email.value.trim() !== '' && password.value.trim() !== '') {
+    if(
+      (email.value.trim() !== '' && emailRegex.test(email.value)) &&
+      (password.value.trim() !== '' && password.value.trim().length >= 5)
+    ) {
       return true
     } else {
       return false
     }
   } else if(props.type === 'update') {
-    if(email.value.trim() !== '' || password.value.trim() !== '' || name.value.trim() !== '') {
+    if(
+      (email.value.trim() !== '' && emailRegex.test(email.value)) ||
+      (password.value.trim() !== '' && password.value.trim().length >= 5) ||
+      name.value.trim() !== ''
+    ) {
       return true
     } else {
       return false
