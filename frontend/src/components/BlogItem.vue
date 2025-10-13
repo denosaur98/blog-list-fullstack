@@ -16,7 +16,7 @@
       <button
         v-if="authStore.user.id === props.blogData?.author.id"
         class="base-button background-red"
-        @click="blogStore.deleteBlog(props.blogData?.id)"
+        @click="openConfirmPopup"
       >
         <font-awesome-icon icon="fa-solid fa-trash" />
         Удалить
@@ -65,6 +65,15 @@
       @close="closePopup"
     />
   </Transition>
+  <Transition name="fade">
+    <ConfirmPopup
+      v-if="isConfirmPopupOpen"
+      :type="'blog'"
+      :confirmTitle="`Вы уверены что хотите удалить запись: <br><span>${blogData?.title}</span> ?`"
+      :blogDataId="props.blogData?.id"
+      @close="closeConfirmPopup"
+    />
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -73,6 +82,7 @@ import { useDateFormat } from '@vueuse/core';
 import { useBlogsStore } from '../store/blogs-store';
 import { useAuthStore } from '../store/auth-store';
 import PopupItem from './PopupItem.vue';
+import ConfirmPopup from './ConfirmPopup.vue';
 
 const blogStore = useBlogsStore()
 const authStore = useAuthStore()
@@ -100,6 +110,14 @@ function toggleComments(): void {
 const isYourBlog = computed(() => {
   return props.blogData?.author.id === authStore.user.id
 })
+
+const isConfirmPopupOpen = ref(false)
+function openConfirmPopup() {
+  isConfirmPopupOpen.value = true
+}
+function closeConfirmPopup() {
+  isConfirmPopupOpen.value = false
+}
 </script>
 
 <style lang="scss" scoped>

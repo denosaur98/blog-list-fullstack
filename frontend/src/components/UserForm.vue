@@ -62,12 +62,20 @@
         class="base-button background-red"
         type="button"
         style="width: 100%;"
-        @click="store.deleteUser"
+        @click="openConfirmPopup"
       >
         Удалить профиль
       </button>
     </div>
   </form>
+  <Transition name="fade">
+    <ConfirmPopup
+      v-if="isConfirmPopupOpen"
+      :type="'auth'"
+      :confirmTitle="`Вы уверены что хотите удалить пользователя: <br><span>${name}</span> ?`"
+      @close="closeConfirmPopup"
+    />
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -77,6 +85,7 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 import type { UserInterface } from '../interfaces/user-interface';
 import AvatarItem from './AvatarItem.vue';
+import ConfirmPopup from './ConfirmPopup.vue';
 
 const props = defineProps({
   type: {
@@ -220,6 +229,14 @@ async function updateUser() {
 
   email.value = store.user.email || ''
   name.value = store.user.name || ''
+}
+
+const isConfirmPopupOpen = ref(false)
+function openConfirmPopup() {
+  isConfirmPopupOpen.value = true
+}
+function closeConfirmPopup() {
+  isConfirmPopupOpen.value = false
 }
 
 onMounted(() => {

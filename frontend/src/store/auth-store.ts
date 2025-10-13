@@ -72,10 +72,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async deleteUser(): Promise<void> {
+    async deleteUser(agree: string): Promise<void> {
+      alert(`${import.meta.env.VITE_API_URL}/auth/${this.user.id}?keepData=${agree}`)
+
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_API_URL}/auth/${this.user.id}`,
+          `${import.meta.env.VITE_API_URL}/auth/${this.user.id}?keepData=${agree}`,
           {
             headers: {
               "Content-Type": "application/json",

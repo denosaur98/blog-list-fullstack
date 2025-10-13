@@ -35,12 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 import { useAuthStore } from '../store/auth-store';
 import { getAvatarPath } from '../utils/avatar-path.ts';
 
-const route = useRoute()
 const store = useAuthStore()
 const avatarInput = ref<HTMLInputElement>()
 const imagePreview = ref<string>('')

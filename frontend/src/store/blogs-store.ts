@@ -102,7 +102,7 @@ export const useBlogsStore = defineStore('blogs', {
       }
     },
 
-    async deleteBlog(id: BlogInterface): Promise<void> {
+    async deleteBlog(id: string): Promise<void> {
       try {
         const response = await axios.delete(
           `${import.meta.env.VITE_API_URL}/blogs/${id}`,
