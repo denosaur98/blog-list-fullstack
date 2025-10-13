@@ -22,7 +22,12 @@
     </div>
     <div class="form__actions-wrapper">
       <div class="base-error-wrapper">
-        <input class="base-input" placeholder="Введите почту:" v-model="email">
+        <input
+          class="base-input"
+          placeholder="Введите почту:"
+          v-model="email"
+          :style="emailErrorMessage ? 'border-color: var(--base-red);' : ''"
+        >
         <Transition name="fade">
           <p v-if="emailErrorMessage">{{ emailErrorMessage }}</p>
         </Transition>
@@ -32,6 +37,7 @@
           class="base-input"
           placeholder="Введите имя:"
           v-model="name"
+          :style="nameErrorMessage ? 'border-color: var(--base-red);' : ''"
         >
         <Transition name="fade">
           <p v-if="nameErrorMessage">{{ nameErrorMessage }}</p>
@@ -44,6 +50,7 @@
             :placeholder="props.type === 'auth' ? 'Введите пароль:' : 'Введите новый пароль:'"
             v-model="password"
             :type="isPasswordOpen ? 'text' : 'password'"
+            :style="passwordErrorMessage ? 'border-color: var(--base-red);' : ''"
           >
           <Transition name="fade">
             <button
