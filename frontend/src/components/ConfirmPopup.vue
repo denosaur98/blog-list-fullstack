@@ -8,7 +8,7 @@
           <button class="base-button background-green" @click="actionType" type="button">Да</button>
           <button class="base-button background-red" @click="emit('close')" type="button">Нет</button>
         </div>
-        <div class="content__actions-wrapper" v-else>
+        <div class="content__actions-wrapper" v-else-if="removeAllUserData">
           <button class="base-button background-green" @click="deleteUser('yes')" type="button">Да</button>
           <button class="base-button background-red" @click="deleteUser('no')" type="button">Нет</button>
         </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { ref, computed, defineProps, defineEmits, onMounted } from 'vue';
 import { useAuthStore } from '../store/auth-store';
 import { useBlogsStore } from '../store/blogs-store';
 
@@ -38,10 +38,21 @@ const blogStore = useBlogsStore()
 const popupTitle = ref<string>('')
 const removeAllUserData = ref<boolean>(false)
 
+const userBlogs = computed<boolean>(() => {
+  const blogs = blogStore.blogsList.filter((b: object) => b.author.id === authStore.user.id)
+
+  return blogs.length > 0
+})
+
 async function actionType(): Promise<void> {
   if(props.type === 'auth') {
-    removeAllUserData.value = true
-    popupTitle.value = `Удалить блоги и комментарии пользователя <span>${authStore.user.name}</span> ?`
+    if(userBlogs.value) {
+      removeAllUserData.value = true
+      popupTitle.value = `Удалить блоги и комментарии пользователя <span>${authStore.user.name}</span> ?`
+    } else {
+      deleteUser('yes')
+      emit('close')
+    }
   } else if(props.type === 'blog') {
     removeAllUserData.value = false
 

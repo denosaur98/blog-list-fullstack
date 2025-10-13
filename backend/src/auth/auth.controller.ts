@@ -33,7 +33,7 @@ export class AuthController {
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@Param('id') userId: string, @Query() keepData: string) {
+  async deleteUser(@Param('id') userId: string, @Query('keepData') keepData: string) {
     return await this.authService.deleteUser(userId, keepData )
   }
 

@@ -79,12 +79,10 @@
 <script setup lang="ts">
 import { ref, computed, defineProps } from 'vue';
 import { useDateFormat } from '@vueuse/core';
-import { useBlogsStore } from '../store/blogs-store';
 import { useAuthStore } from '../store/auth-store';
 import PopupItem from './PopupItem.vue';
 import ConfirmPopup from './ConfirmPopup.vue';
 
-const blogStore = useBlogsStore()
 const authStore = useAuthStore()
 
 const props = defineProps({

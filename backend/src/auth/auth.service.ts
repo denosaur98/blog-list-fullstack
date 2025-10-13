@@ -154,7 +154,7 @@ export class AuthService {
     })
     if(!existingUser) throw new BadRequestException({ message: 'Пользователь с таким id не найден' })
 
-    if(keepData === 'yes') {
+    if(keepData === 'no') {
       const systemUser = await this.prisma.user.upsert({
         where: {
           email: 'system@deleted.user'
