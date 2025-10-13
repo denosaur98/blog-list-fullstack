@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Register } from './dto/register.dto';
 import { Login } from './dto/login.dto';
 import { UpdateUser } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { AvatarUploadInterceptor } from '../interceptors/avatar-upload.interceptor';
 
 @Controller('auth')
@@ -34,8 +33,8 @@ export class AuthController {
 
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@Param('id') userId: string) {
-    return await this.authService.deleteUser(userId)
+  async deleteUser(@Param('id') userId: string, @Query() keepData: string) {
+    return await this.authService.deleteUser(userId, keepData )
   }
 
   @Post('avatar/:id')

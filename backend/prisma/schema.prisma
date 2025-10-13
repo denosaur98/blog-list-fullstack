@@ -31,7 +31,7 @@ model Blog {
   description String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
   comments Comment[]
 
@@ -42,7 +42,7 @@ model Comment {
   id String @id @default(uuid())
   text String
   createdAt DateTime @default(now())
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
   blog Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId String

@@ -142,19 +142,78 @@ export class AuthService {
     }
   }
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string, keepData: string) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         id: userId
+      },
+      include: {
+        posts: true,
+        comments: true
       }
     })
     if(!existingUser) throw new BadRequestException({ message: 'Пользователь с таким id не найден' })
 
-    return await this.prisma.user.delete({
+    if(keepData === 'yes') {
+      const systemUser = await this.prisma.user.upsert({
+        where: {
+          email: 'system@deleted.user'
+        },
+        update: {},
+        create: {
+          email: 'system@deleted.user',
+          name: 'Deleted user',
+          password: await bcrypt.hash('system_password', 10),
+          role: 'USER'
+        }
+      })
+
+      if(existingUser.posts.length > 0) {
+        await this.prisma.blog.updateMany({
+          where: {
+            authorId: userId
+          },
+          data: {
+            authorId: systemUser.id
+          }
+        })
+      }
+
+      if(existingUser.comments.length > 0) {
+        await this.prisma.comment.updateMany({
+          where: {
+            authorId: userId
+          },
+          data: {
+            authorId: systemUser.id
+          }
+        })
+      } 
+    }
+
+    if(existingUser.avatar) {
+      const oldFileName = existingUser.avatar.split('/').pop()
+      if(oldFileName) {
+        const oldAvatarPath = this.fileUploadService.getImagePath(oldFileName)
+        
+        if(existsSync(oldAvatarPath)) {
+          unlinkSync(oldAvatarPath)
+        }
+      }
+    }
+
+    const deletedUser = await this.prisma.user.delete({
       where: {
         id: userId
       }
     })
+
+    const message = keepData === 'yes' ? 'Пользователь удалён, данные сохранены за системным пользователем' : 'Пользователь удалён'
+
+    return {
+      message,
+      deletedUser: deletedUser.id
+    }
   }
 
   async updateAvatar(userId: string, file: Express.Multer.File) {
