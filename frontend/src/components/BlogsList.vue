@@ -38,7 +38,7 @@ onMounted(async() => {
 .blog-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
   height: 100%;
@@ -51,7 +51,7 @@ onMounted(async() => {
     justify-content: flex-start;
     width: 100%;
     gap: 10px;
-    margin-top: 50px;
+    margin-top: 100px;
   }
 }
 </style>

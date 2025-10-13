@@ -81,6 +81,12 @@ input, textarea {
     border: 1px solid var(--base-grey) !important;
     color: var(--base-light-grey) !important;
   }
+
+  p {
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
 }
 
 .base-link {

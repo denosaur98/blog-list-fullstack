@@ -22,12 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, useRouter, useRoute } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { useAuthStore } from '../store/auth-store';
 import { getAvatarPath } from '../utils/avatar-path.ts';
 
 const router = useRouter()
-const route = useRoute()
 const store = useAuthStore()
 
 async function logout(): Promise<void> {
@@ -50,6 +49,10 @@ async function logout(): Promise<void> {
   border-radius: 5px;
   width: 150px;
   padding: 10px;
+
+  @media (max-width: 600px) {
+    width: 120px;
+  }
 
   .user-link {
     display: flex;

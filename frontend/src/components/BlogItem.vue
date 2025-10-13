@@ -3,7 +3,7 @@
     <div class="item__actions-wrapper">
       <button class="base-button background-blue" @click="openPopup('comment')">
         <font-awesome-icon icon="fa-solid fa-comment" />
-        Комментировать
+        <p>Комментировать</p>
       </button>
       <button
         v-if="authStore.user.id === props.blogData?.author.id"
@@ -11,7 +11,7 @@
         @click="openPopup('update')"
       >
         <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-        Редактировать
+        <p>Редактировать</p>
       </button>
       <button
         v-if="authStore.user.id === props.blogData?.author.id"
@@ -19,7 +19,7 @@
         @click="openConfirmPopup"
       >
         <font-awesome-icon icon="fa-solid fa-trash" />
-        Удалить
+        <p>Удалить</p>
       </button>
     </div>
     <h2 class="base-title">{{ props.blogData?.title }}</h2>
@@ -144,8 +144,6 @@ function closeConfirmPopup() {
     }
 
     @media (max-width: 600px) {
-      flex-direction: column;
-
       button {
         width: 100%;
       }

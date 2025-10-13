@@ -49,12 +49,14 @@ function closePopup(): void {
   width: 100%;
   gap: 10px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 1400px) {
     flex-direction: column;
+    align-items: flex-start;
+    width: calc(100% - 150px);
+  }
 
-    button {
-      width: 100%;
-    }
+  @media (max-width: 600px) {
+    width: calc(100% - 110px);
   }
 }
 </style>
