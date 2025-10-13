@@ -190,7 +190,7 @@ function closeConfirmPopup() {
     width: 100%;
     max-height: 200px;
     gap: 20px;
-    margin-top: 50px;
+    margin: 50px 0 30px;
 
     .comments__list {
       display: flex;
